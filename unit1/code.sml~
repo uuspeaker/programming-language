@@ -1,24 +1,33 @@
+fun is_older (date1 : (int*int*int), date2 : (int*int*int)) = 
+    if #1 date1 = #1 date2
+    then if #2 date1 = #2 date2
+	 then if #3 date1 = #3 date2
+	      then false
+	      else #3 date1 < #3 date2
+	 else #2 date1 < #2 date2
+    else #1 date1 < #1 date2
 
-fun is_older = (first_date: int * int * int , second_date: int * int * int) =
-	       if #1 first_data = #1 second_date
-				 then if #2 first_data = #2 second_dat
-		    then if #3 first_data = #3 second_dat
-			 then false
-			 else #3 first_data < #3 second_dat
-		    else #2 first_data < #2 second_dat
-	       else #1 first_data < #1 second_dat
+fun number_in_month (dates : (int*int*int) list, month : int) =
+    if null dates
+    then 0
+    else let fun is_in(target : int) =
+		 if target = month then 1 else 0
+         in
+	     is_in(#2 (hd dates)) + number_in_month(tl dates, month)
+         end					       
 
+fun number_in_months (dates : (int*int*int) list, months : int list) =
+    if null dates orelse null months
+    then 0
+    else number_in_month(dates, hd(months)) + number_in_months(dates, tl(months))
 
-
-(*
-val number_in_month = fn : (int * int * int) list * int -> int
-val number_in_months = fn : (int * int * int) list * int list -> int
-val dates_in_month = fn : (int * int * int) list * int -> (int * int * int) list
-val dates_in_months = fn : (int * int * int) list * int list -> (int * int * int) list
-val get_nth = fn : string list * int -> string
-val date_to_string = fn : int * int * int -> string
-val number_before_reaching_sum = fn : int * int list -> int
-val what_month = fn : int -> int
-val month_range = fn : int * int -> int list
-val oldest = fn : (int * int * int) list -> (int * int * int) option
-*)
+fun dates_in_month (dates : (int*int*int) list, month : int) =
+    if null dates
+    then 0
+    else let fun is_in(target : int*int*int) =
+		 if target = month then target else []
+         in
+	     is_in(#2 (hd dates)):: dates_in_month(tl dates, month)
+         end							      
+	     
+ 
